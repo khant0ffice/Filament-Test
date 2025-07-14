@@ -12,6 +12,8 @@ class LatestAppEmployees extends BaseWidget
 {
     protected static ?int $sort = 3;
 
+    protected static ?string $heading = 'Latest Employees';
+
     public function table(Table $table): Table
     {
         return $table
