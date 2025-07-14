@@ -8,12 +8,14 @@ use App\Filament\Resources\CountryResource\RelationManagers\EmployeesRelationMan
 use App\Filament\Resources\CountryResource\RelationManagers\StatesRelationManager;
 use App\Models\Country;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,12 +44,17 @@ class CountryResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('code')
                     ->required()
-                    ->numeric()
                     ->maxLength(3),
                 Forms\Components\TextInput::make('phonecode')
                     ->required()
                     ->numeric()
                     ->maxLength(5),
+                FileUpload::make('image')
+                    ->label('Country Image')
+                    ->image()
+                    ->directory('country-images'), // saved to storage/app/public/products
+                // spans full width if you're using grid
+
             ]);
     }
 
@@ -59,6 +66,7 @@ class CountryResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('code')
+                    ->label('Country Code')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('phonecode')
@@ -71,6 +79,12 @@ class CountryResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                ImageColumn::make('image')
+                    ->label('Country Image')
+                    ->disk('public')
+                    ->circular()
+                    ->width(60)
+                    ->height(60)
             ])
             ->filters([])
             ->actions([
